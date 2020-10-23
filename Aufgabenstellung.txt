@@ -1,0 +1,44 @@
+Login
+	->Username/Passwort, Facebook, Google 
+
+JEDE SEITE
+	-> Menüleiste
+		-> Home
+		-> Erledigte Todo's anschauen
+		-> Logout Button
+
+Home
+	-> Auflistung von alles Todo's 
+		-> Titel
+		-> Fälligkeitsdatum
+		-> Bereits verwendete Zeit aus ERSTELLEN
+		-> Farblable aus ERSTELLEN
+
+	-> Button zum erstellen eines neuen Todo's
+	
+
+Todo erstellen
+	-> Titel
+	-> Beschreibung
+	-> Fälligkeit mit DATUM & UHRZEIT
+	-> Farblable für Homescreen
+
+Todo bearbeiten
+	-> Titel 
+	-> Beschreibung
+	-> Fälligkeit mit DATUM & UHRZEIT
+	-> Farblable für Homescreen
+
+Todo bedienen
+	-> Titel
+	-> Zeittracker STARTEN 
+	-> Zeittracker STOPPEN
+	-> Bereits verwendete Zeit
+	-> Zeittracker fertigstellen ==> stoppt automatisch auch tracken 
+
+Erledigte Todo's
+	-> Titel
+	-> Beschreibung
+	-> Fertigstellung DATUM & VERWENDETER ZEIT
+
+
