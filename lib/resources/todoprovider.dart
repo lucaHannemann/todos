@@ -14,11 +14,10 @@ class Todoprovider {
         .collection("todos")
         .get()
         .then((snapshot) {
-        return snapshot.docs.map((document) {
+      snapshot.docs.map((document) {
         return Todo.fromJson(document.data());
       }).toList();
-    }).then((List<Todo> todos) {
-      return todos;
     });
+    return Todo.fromJson(todos);
   }
 }

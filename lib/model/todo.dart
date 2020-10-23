@@ -9,7 +9,7 @@ class Todo {
   String _timeSpent;
   Timestamp _timestamp;
   String _title;
-
+  
   Todo.fromJson(Map<String, dynamic> parsedJson) {
     _color = parsedJson["color"];
     _descrption = parsedJson["description"];
