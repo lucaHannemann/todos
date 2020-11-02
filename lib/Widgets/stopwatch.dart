@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:Todo/timer_bloc.dart';
 
 // ignore: must_be_immutable
 class StopwatchTodo extends StatefulWidget {
@@ -28,42 +29,12 @@ class _StopwatchTodoState extends State<StopwatchTodo> {
   var time;
   final dbRef = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser.uid;
-
-  bool isTrackingTime = false;
-
-  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
-    onChangeRawSecond: (value) {},
-  );
-
-  void setTimeToFb(milliseconds, displaytime, id, user) async {
-    await dbRef
-        .collection("user")
-        .doc(user)
-        .collection("todos")
-        .doc(id)
-        .update({"timeInMilliseconds": milliseconds, "timeSpent": displaytime});
-  }
-
-  void startTracking() {
-    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-    widget.isTrackingTime = true;
-    widget.trackCallback(widget.isTrackingTime);
-  }
-
-  void stopTracking(displayTime) {
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-    setTimeToFb(widget.timeInMilliseconds + _stopWatchTimer.rawTime.value,
-        displayTime.substring(0, 8), widget.id, currentUser);
-    widget.isTrackingTime = false;
-    widget.trackCallback(widget.isTrackingTime);
-    widget.timeCallback(displayTime);
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<int>(
-      stream: _stopWatchTimer.rawTime,
-      initialData: 100000,
+      stream: timeBloc.trackedTime,
+      initialData: 0,
       builder: (context, snapshot) {
         final value = snapshot.data + widget.timeInMilliseconds;
         final displayTime = StopWatchTimer.getDisplayTime(value);
@@ -89,7 +60,9 @@ class _StopwatchTodoState extends State<StopwatchTodo> {
                     FloatingActionButton(
                       heroTag: "btn1",
                       onPressed: () {
-                        startTracking();
+                        setState(() {
+                          timeBloc.startTracking();
+                        });
                       },
                       backgroundColor: Colors.green,
                       child: Text("Start"),
@@ -97,7 +70,8 @@ class _StopwatchTodoState extends State<StopwatchTodo> {
                     FloatingActionButton(
                       heroTag: "btn2",
                       onPressed: () {
-                        stopTracking(displayTime);
+                        timeBloc.stopTracking(displayTime,
+                            snapshot.data, widget.id, currentUser);
                       },
                       backgroundColor: Colors.red,
                       child: Text("Stop"),

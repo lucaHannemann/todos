@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Todo {
+class DoneTodo {
   List<_Data> _data = [];
 
-  Todo.fromFirebase(Map<String, dynamic> firebaseData) {
+  DoneTodo.fromFirebase(Map<String, dynamic> dataFromFirebase) {
     List<_Data> temp = [];
-    for (var key in firebaseData.keys) {
-      _Data data = _Data(firebaseData[key], key);
+    for (var key in dataFromFirebase.keys) {
+      _Data data = _Data(dataFromFirebase[key], key);
       temp.add(data);
     }
     _data = temp;
@@ -17,7 +17,8 @@ class Todo {
 class _Data {
   String _id;
   int _color;
-  String _descrption;
+  String _description;
+  String _doneDate;
   String _dueDate;
   int _textcolor;
   int _timeInMilliseconds;
@@ -25,20 +26,23 @@ class _Data {
   Timestamp _timestamp;
   String _title;
 
-  _Data(firebaseData, key) {
+  _Data(data, key) {
     _id = key;
-    _color = firebaseData["color"];
-    _descrption = firebaseData["description"];
-    _dueDate = firebaseData["dueDate"];
-    _textcolor = firebaseData["textcolor"];
-    _timeInMilliseconds = firebaseData["timeInMilliseconds"];
-    _timeSpent = firebaseData["timeSpent"];
-    _timestamp = firebaseData["timestamp"];
-    _title = firebaseData["title"];
+    _color = data["color"];
+    _description = data["description"];
+    _doneDate = data["doneDate"];
+    _dueDate = data["dueDate"];
+    _textcolor = data["textcolor"];
+    _timeInMilliseconds = data["timeInMilliseconds"];
+    _timeSpent = data["timeSpent"];
+    _timestamp = data["timestamp"];
+    _title = data["title"];
   }
+
   String get id => _id;
   int get color => _color;
-  String get description => _descrption;
+  String get description => _description;
+  String get doneDate => _doneDate;
   String get dueDate => _dueDate;
   int get textcolor => _textcolor;
   int get timeInMilliseconds => _timeInMilliseconds;

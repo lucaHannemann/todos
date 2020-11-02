@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../model/todo.dart';
+import '../model/doneTodo.dart';
 
-class Todoprovider {
-  Future<Todo> fetchTodoList() async {
+class DoneTodoprovider {
+  Future<DoneTodo> fetchDoneTodoList() async {
     final currentUser = FirebaseAuth.instance.currentUser.uid;
     Map<String, dynamic> data = {};
     await FirebaseFirestore.instance
         .collection("user")
         .doc(currentUser)
-        .collection("todos")
+        .collection("doneTodos")
         .get()
         .then((snapshot) {
       snapshot.docs.forEach((document) {
@@ -19,6 +19,6 @@ class Todoprovider {
         }).toList();
       });
     });
-    return Todo.fromFirebase(data);
+    return DoneTodo.fromFirebase(data);
   }
 }

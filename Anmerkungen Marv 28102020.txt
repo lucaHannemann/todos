@@ -1,0 +1,21 @@
+1. Firebase.intializeApp wird 3x aufgerufen		check
+2. Warum werden FirebaseOptions explizit übergeben?	Check
+3. Dateien sind alle unterschiedliech bennant (Widgets/, resources/, createTodo.dart, todos_bloc.dart, doneTodos_bloc.dart, EmailForm.dart). Dateien werden in snake_case bennant. Check
+6. Jedes mal wenn man die App startet muss man sich neu einloggen obwohl man eingeloggt ist.		check
+7. Während dem Login muss ein Ladebalken angezeigt werden
+9. Wenn ich bei dem ColorPicker zurück gehe kommt ein Fehler.		check
+10. Timer hört auf wenn ich auf die Übersicht gehe.
+11. Die Zeit wird nicht gespeichert wenn ich auf die Übersicht gehe.
+
+
+
+8. Man kann unendlich viele Routes pushen egal ob man schon auf dem Bildschirm ist oder nicht. (Home, Home, Home, Home)
+
+
+12. TimeSpent ist falsch.
+13. DoneTodo = Todo mit done=true
+14. Warum hast du bei DoneTodo nicht freezed und json_serializable benutzt?
+
+
+4. Falscher package name
+5. Login Fehler werden noch nicht alle behandelt.

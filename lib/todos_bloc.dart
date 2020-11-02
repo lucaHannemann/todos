@@ -1,4 +1,7 @@
+import 'package:Todo/Widgets/timer_needs_to_stop.dart';
+import 'package:Todo/home.dart';
 import 'package:Todo/model/todo.dart';
+import 'package:Todo/widgets/overview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "dart:async";
 import 'package:flutter/cupertino.dart';
@@ -21,92 +24,112 @@ class TodosBloc {
   dispose() {
     _todofetcher.close();
   }
-}
 
-final bloc = TodosBloc();
-/*class TodosBloc {
-  final _todosController = BehaviorSubject<List<Todo>>();
-
-  BehaviorSubject<List<Todo>> get todosController => _todosController;
-
-  Stream<List<Todo>> get todos$ => _todosController.stream;
-
-  loadTodos() {
-    this.repository.loadTodos().then((todos) {
-      _todosController.add(todos);
+createTodo(
+  context,
+  GlobalKey<FormState> formkey,
+  Color currentColor,
+  String title,
+  String description,
+  DateTime now,
+  date,
+  String currentUser,
+  Function setTextcolor,
+) {
+  if (formkey.currentState.validate()) {
+    int fontcolor = int.parse(setTextcolor(currentColor).substring(6, 16));
+    FirebaseFirestore.instance
+        .collection("user")
+        .doc(currentUser)
+        .collection("todos")
+        .add({
+      "title": title,
+      "description": description,
+      "color": int.parse(currentColor.toString().substring(6, 16)),
+      "dueDate": date,
+      "timeSpent": "00:00:00",
+      "timeInMilliseconds": 0,
+      "timestamp": now,
+      "textcolor": fontcolor
     });
-  }
-
-  removeTodo(String id) {
-    final todos = (_todosController.value ?? []).toList()
-      ..removeWhere((todo) => todo.todoId == id);
-
-    _todosController.add(todos);
-  }
-
-  dipose() {
-    _todosController.close();
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ));
   }
 }
 
-class TestWidget extends StatefulWidget {
-  @override
-  _TestWidgetState createState() => _TestWidgetState();
+updateTodo(context, String currentUser, String docId, String dateInput,
+    String title, String description, Color newColor) {
+  FirebaseFirestore.instance
+      .collection("user")
+      .doc(currentUser)
+      .collection("todos")
+      .doc(docId)
+      .update({
+    "title": title,
+    "description": description,
+    "color": int.parse(newColor.toString().substring(6,16)),
+    "dueDate": dateInput,
+    "timestamp": DateTime.now()
+  });
+  Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ));
 }
 
-class _TestWidgetState extends State<TestWidget> {
-
-  TodosBloc _bloc;
-
-  removeTodo(Todo todo) async {
-    final confirmed = await showDialog(context: context, builder: (context) {
-        return ConfirmDialog;
-
-    });
-
-    if (confirmed != true) {
-      return;
-    }
-
-    _bloc.removeTodo(todo.todoId);
-
-  }
-
-  initState() {
-    super.initState();
-    _bloc = new TodosBloc(repository)..loadTodos();
-  }
-
-
-  @override
-  void dispose() {
-    _bloc.dipose();
-    super.dispose();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<List<Todo>>(
-      stream: _bloc.todos$,
-      builder: (_, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
-
-        final todos = snapshot.data;
-
-        return ListView.builder(
-          itemCount: snapshot.data.length,
-          itemBuilder: (_, index) {
-            if (index >= todos.length) return null;
-
-            return GestureDetector(
-              onTap: () => removeTodo(todos[index]),
-              child: Text("Todo ${todos[index].title}")
-              );
-          
-          },
-        );
-      }
+finishTodo(data, String currentUser, String currentTime, bool isTrackingTime,
+    context) {
+  if (isTrackingTime) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return TimerNeedsToStop();
+      },
     );
+    return;
   }
-}*/
+  deleteTodo(data, currentUser, context);
+  setDoneTodo(currentUser, data, currentTime);
+  
+}
+
+deleteTodo(data, String currentUser, context) {
+  FirebaseFirestore.instance
+      .collection("user")
+      .doc(currentUser)
+      .collection("todos")
+      .doc(data.id)
+      .delete();
+      Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ));
+}
+
+setDoneTodo(String currentUser, data, String currentTime) {
+  FirebaseFirestore.instance
+      .collection("user")
+      .doc(currentUser)
+      .collection("doneTodos")
+      .doc(data.id)
+      .set({
+    "title": data.title,
+    "description": data.description,
+    "color": data.color,
+    "doneDate": currentTime,
+    "dueDate": data.dueDate,
+    "timeSpent": data.timeSpent,
+    "timeInMilliseconds": data.timeInMilliseconds,
+    "timestamp": DateTime.now(),
+    "textcolor": data.textcolor
+  });
+}
+
+}
+
+final todoBloc = TodosBloc();

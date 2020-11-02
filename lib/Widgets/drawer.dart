@@ -1,11 +1,10 @@
-import 'package:Todo/doneTodos.dart';
-import 'package:Todo/overview.dart';
+import 'package:Todo/done_todos.dart';
+import 'package:Todo/widgets/login.dart';
+import 'package:Todo/widgets/overview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../home.dart';
 
 class AppDrawer extends StatelessWidget {
   final String loginType;
@@ -41,7 +40,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             title: Text("Home"),
             onTap: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => Overview()));
             },
           ),
@@ -49,7 +48,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             title: Text("Done Todos"),
             onTap: () {
-              Navigator.push(context,
+              Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => DoneTodos()));
             },
           ),
@@ -59,7 +58,7 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               logout();
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Home()));
+                  context, MaterialPageRoute(builder: (context) => Login()));
             },
           )
         ],

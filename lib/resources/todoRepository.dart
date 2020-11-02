@@ -1,5 +1,3 @@
-import 'package:rxdart/rxdart.dart';
-
 import '../model/todo.dart';
 import 'todoprovider.dart';
 

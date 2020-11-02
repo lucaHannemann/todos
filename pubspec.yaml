@@ -1,5 +1,5 @@
 name: Todo
-description: A new Flutter project.
+description: An App to handle and track your Todos.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -37,7 +37,7 @@ dependencies:
   freezed: ^0.12.2
   freezed_annotation: ^0.12.0
 
-  rxdart:
+  rxdart: ^0.24.1
 
   validators: ^2.0.1
   flutter_material_color_picker: ^1.0.5
@@ -45,9 +45,6 @@ dependencies:
   flutter_datetime_picker: ^1.4.0
   intl: ^0.16.1
   stop_watch_timer: ^0.6.0+1
-
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

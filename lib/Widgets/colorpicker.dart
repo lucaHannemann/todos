@@ -23,19 +23,25 @@ class _ColorpickerState extends State<ColorpickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Pick a Color"),
-      content: ColorPicker(
-        pickerColor: pickerColor,
-        paletteType: PaletteType.hsv,
-        onColorChanged: (Color color) {
-          setState(() {
-            pickerColor = color;
-          });
-        },
-      ),
-      actions: <Widget>[
-        FlatButton(
+    return WillPopScope(
+      onWillPop: () async {
+        color = widget.defaultColor;
+        Navigator.of(context).pop(color);
+        return true;
+      },
+      child: AlertDialog(
+        title: Text("Pick a Color"),
+        content: ColorPicker(
+          pickerColor: pickerColor,
+          paletteType: PaletteType.hsv,
+          onColorChanged: (Color color) {
+            setState(() {
+              pickerColor = color;
+            });
+          },
+        ),
+        actions: <Widget>[
+          FlatButton(
             onPressed: () {
               setState(() {
                 color = pickerColor;
@@ -45,8 +51,10 @@ class _ColorpickerState extends State<ColorpickerDialog> {
             child: Text(
               "Pick",
               style: TextStyle(fontSize: 20),
-            ))
-      ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

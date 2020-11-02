@@ -1,16 +1,15 @@
 import 'package:Todo/Widgets/colorpicker.dart';
-import 'overview.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:Todo/todos_bloc.dart';
 
 class EditTodo extends StatefulWidget {
   final String title;
   final String description;
-  final String color;
+  final int color;
   final String dueDate;
   final String id;
   EditTodo({this.title, this.description, this.color, this.dueDate, this.id});
@@ -37,7 +36,7 @@ class _EditTodoState extends State<EditTodo> {
     super.initState();
     titlecontroller = TextEditingController(text: widget.title);
     descriptioncontroller = TextEditingController(text: widget.description);
-    currentColor = Color(int.parse(widget.color));
+    currentColor = Color(widget.color);
     dueDate = widget.dueDate;
     day = widget.dueDate.substring(0, 10);
     time = widget.dueDate.substring(11, 16);
@@ -49,27 +48,6 @@ class _EditTodoState extends State<EditTodo> {
     setState(() {
       currentColor = color;
     });
-  }
-
-  void updateTodo(String dateinput, user) {
-    FirebaseFirestore.instance
-        .collection("user")
-        .doc(user)
-        .collection("todos")
-        .doc(id)
-        .update({
-      "title": titlecontroller.text,
-      "description": descriptioncontroller.text,
-      "color": currentColor.toString().substring(6, 16),
-      "dueDate": dateinput,
-      "timestamp": DateTime.now()
-    });
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Overview(),
-      ),
-    );
   }
 
   String validateTextinput(value, String nameOfInput) {
@@ -168,7 +146,14 @@ class _EditTodoState extends State<EditTodo> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formkey.currentState.validate()) {
-                        updateTodo(date, currentUser);
+                        todoBloc.updateTodo(
+                            context,
+                            currentUser,
+                            id,
+                            date,
+                            titlecontroller.text,
+                            descriptioncontroller.text,
+                            currentColor);
                       }
                     },
                     child: Text("Update your Todo"),
